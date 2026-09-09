@@ -1,0 +1,1 @@
+Die UI-Schicht wird nach erfolgreicher Validierung des Genetik-POCs mit Godot-Szenen und Platzhalter-Sprites umgesetzt.
