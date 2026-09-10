@@ -16,8 +16,8 @@ Die Tabelle ist ein Zuchtmodell, keine lineare Farb-Rangliste. Ein Huhn besitzt 
 
 | Locus | Allele / Schreibweise | Vererbung | Wirkung im Phanotyp | Chabo-/POC-Relevanz | Status |
 | --- | --- | --- | --- | --- | --- |
-| `E` Extension / MC1R | `E`, `ER`, `EWh`, `e+`, `eb`, `ey` | autosomal; Allelserie mit Dominanzordnung, Details teils kontextabhangig | legt die Grundverteilung von Schwarz (Eumelanin) und Gold/Rot (Phaeomelanin) fest | notwendige Basis fuer Schwarz, Gold, Gelb und komplexe Muster | zuerst implementieren |
-| `S` Silver | `S`, `s+` | Z-gebunden; `S` dominant | unterdruckt Phaeomelanin: Gold/Rot wird silbrig-weiss | relevant fuer weisse/silberne Grundfarben und geschlechtsabhangige Ergebnisse | POC-Erweiterung |
+| `E` Extension / MC1R | `E`, `ER`, `e^Wh`, `e+`, `e^b` (weitere Nomenklaturen existieren) | autosomal; Chicken-colors beschreibt die Dominanzordnung `E > ER > e^Wh > e+ > e^b` | legt die Grundverteilung von Schwarz (Eumelanin) und Gold/Rot (Phaeomelanin) fest | notwendige Basis fuer Schwarz, Gold, Gelb und komplexe Muster | zuerst implementieren |
+| `S` Silver | `S`, `s+` | Z-gebunden; `S` dominant | unterdruckt Phaeomelanin: Gold/Rot wird silbrig-weiss; `s+` steht fuer Gold | relevant fuer weisse/silberne Grundfarben und geschlechtsabhangige Ergebnisse | POC-Erweiterung |
 | `B` Barring | `B`, `b+` | Z-gebunden; `B` dominant | periodische Pigmentunterbrechung, gesperbertes/cuckoo Muster | Chabo `gesperbert` auf diesen Mechanismus abbilden | POC-Erweiterung |
 | `choc` Chocolate | `choc`, `Choc+` | Z-gebunden; rezessiv | verdunnt Eumelanin zu Braun/Schokoladenbraun | Chabo-Seite zeigt Schokoladenbraun; genaue Zuchtannahme validieren | spaeter |
 | `Co` Columbian | `Co`, `co+` | autosomal; Modifikator | lasst mehr Schwarz in Halsbehang und Sattel zu und wirkt als Restriktionsfaktor | Chabo-PDF beschreibt `Co` als Faktor mit ahnlicher, aber nicht identischer Wirkung zu `Db` | POC-Modifikator |
@@ -30,6 +30,7 @@ Die Tabelle ist ein Zuchtmodell, keine lineare Farb-Rangliste. Ein Huhn besitzt 
 | `Bl` Blue | `Bl`, `bl+` | autosomal; unvollstandig dominant | `bl+/bl+` schwarz, `Bl/bl+` blau, `Bl/Bl` splash | Chabo Blau; erzeugt nicht einfach ein rezessives Blau | POC-Erweiterung |
 | `lav` Lavender / MLPH | `lav`, `Lav+` | autosomal; rezessiv | verdunnt beide Pigmente gleichmassig: Schwarz zu Perlgrau, Gold zu blassem Strohton | Chabo Perlgrau; zentrale Farbe im POC | POC, korrekt rezessiv |
 | `Mh` Mahogany | `Mh`, `mh+` | autosomal; Modifikator | verstarkt Phaeomelanin von Gold in Richtung tiefes Rot/Mahagoni und kann Aufhellung durch `I/I` begrenzen | Chabo-PDF nennt `Mh` zur Stabilisierung der roten Grundfarbe | POC-Modifikator |
+| `gold_neck` | `gn`, `gn+` (POC-Marker) | autosomal; vereinfachter Chabo-Marker | kennzeichnet die Goldhalsig-Basis; zusammen mit `I/i+` wird im POC Rotgesattelt ausgegeben | bildet die beschriebene Goldhalsig-Kreuzung ab, bis der genaue Locus validiert ist | vereinfachtes POC |
 | `Cb` Champagnerblond | `Cb`, `cb+` | Vererbung und Allelwirkung noch nicht abschliessend geklart | verdunnt rotes Pigment zu cremigem Gelb, Schwarz bleibt weitgehend unbeeinflusst | moeglicher Bestandteil besonders gleichmassiger, heller Gelbvarianten | dokumentieren, validieren |
 | `Di` Yellow diluter / Aufhellungsfaktor | `Di`, `di+` | Vererbung und molekulare Zuordnung noch offen | hellt stark auf und reduziert oder verdrangt Schwarz; Wirkung abhangig von Grundfarbe und Modifikatoren | Chabo-PDF nennt `Di` als wichtigen Faktor fuer den gelben Farbschlag | dokumentieren, validieren |
 | `Dun` / `Id` | mehrere Allele je nach Nomenklatur | autosomal; Dosiseffekt | Eumelanin-Verdunnung mit heterozygotem und homozygotem Phanotyp | nicht als Chabo-Blau oder Lavender abkurzen | spaeter / validieren |
@@ -43,10 +44,14 @@ Diese Namen sind Phanotypen und duerfen im Datenmodell nicht direkt als einzelne
 | Schwarz | dunkler E-Locus, ohne sichtbare Verdunnung; genaue Chabo-Kombination offen | hoch als Phanotyp, Genotyp offen |
 | Weiss | `I/-` oder `c/c` als zwei unterschiedliche Wege; Hintergrund muss gespeichert bleiben | hoch |
 | Gelb | vorzugsweise Weizenbasis mit `Db`, `Co` sowie moeglich `Cb` und `Di`; `I` kann stoerendes Schwarz weiter aufhellen | mittel; PDF beschreibt mehrere Wege und keine stabilisierte Einzelformel |
-| Gold | Gold-Grundfarbe aus E-Locus und Phaeomelanin | hoch als Konzept |
+| Gold | Gold-Grundfarbe aus Phaeomelanin mit `s+/s+`; der E-Locus legt die zugrunde liegende Verteilung fest | hoch als Konzept |
+| Silber | `S/-` am Z-Locus unterdrueckt Phaeomelanin; der zugrunde liegende E-Locus bleibt erhalten | hoch als Konzept |
 | Blau | typischerweise `Bl/bl+`; `Bl/Bl` ergibt Splash und ist nicht dasselbe | hoch |
 | Perlgrau | `lav/lav`; Lavender wirkt auch auf den Goldanteil | hoch |
-| Schwarz mit weissen Tupfen | schwarzer Hintergrund plus `mo/mo` | hoch |
+| Silber-Porzellan | `S/-` plus `mo/mo` und Porzellan-Modifikatoren; Silberne Grundfarbe mit schwarzen Zeichnungselementen | hoch als POC-Modell |
+| Perlgrau-Silber-Porzellan | `S/-` plus `lav/lav`, `mo/mo` und Porzellan-Modifikatoren; schwarze Zeichnung wird perlgrau | hoch als POC-Modell |
+| Goldhalsig | Goldbasis mit dem POC-Marker `gold_neck`; als Ausgangsprofil fuer Rotgesattelt | Chabo-Sondermodell |
+| Rotgesattelt | `I/i+` auf Goldbasis plus `gold_neck` oder `Mh`; Name bleibt als sichtbarer Sonderphanotyp erhalten | Chabo-Sondermodell |
 | Perlgrau mit weissen Tupfen | `lav/lav` plus `mo/mo` | hoch |
 | Gelb mit weissen Tupfen | gelber Hintergrund, `I`/Weissschwanz-Basis und doppelte `mo`-Dosis; exakt lautet der beschriebene Weg Gelb mit weissem Schwanz und weissen Tupfen | hoch als PDF-Modell |
 | Weiss mit schwarzem Schwanz | Gelb mit schwarzem Schwanz plus eine oder zwei Dosen `I`; `I` wandelt das Schwarz um | hoch als PDF-Modell |
@@ -62,10 +67,15 @@ Diese Namen sind Phanotypen und duerfen im Datenmodell nicht direkt als einzelne
 - **Lavender:** `lav` ist rezessiv. Ein Trager bleibt phanotypisch nicht automatisch perlgrau.
 - **Chabo-Gelb:** `Db` verdrangt Schwarz in die Peripherie und hellt Gold auf; `Co` kann ahnlich wirken. `Cb` hellt Rot zu Cremegelb auf, `Di` reduziert oder verdrangt Schwarz noch starker. Die PDF beschreibt dies als mehrfaktorielle, teilweise unerforschte Kombination.
 - **Dominant-Weiss-Dosis:** Eine Dosis `I` kann schwarzes Pigment in Weiss umwandeln. Bei `I/I` wird auch die goldene oder rote Grundfarbe oft aufgehellt; `Mh` kann diese Aufhellung abschwachen.
+- **Rotgesattelt / Goldhalsig:** Im Chabo-POC wird `I/i+` auf einer Goldbasis weitgehend gold belassen. `I/I` ergibt auf derselben Basis Creme. Wird ein Creme-Tier mit Goldhalsig gekreuzt, erzeugt die Kombination `I/i+` plus `gold_neck` Rotgesattelt. Ein vererbtes `Mh` kann `gold_neck` in diesem Modell ersetzen.
 - **Porzellan ist ein Kombinationsphanotyp:** In der Chabo-PDF wird die alte Porzellan-/Dreibuntfarbe als Gelb mit schwarzem Schwanz plus `mo/mo` beschrieben. `porcelain` darf daher nicht als einzelnes Allel gespeichert werden.
+- **Gold-Porzellan ist nicht automatisch Mahagoni:** Die PDF nennt Gold-Porzellan als Zwischenschritt zum Erklären von Gelb/Rot mit Tupfen. Sie beschreibt autosomales Rot und `Mh` separat als Grundlage fuer die dunklere rote Variante. Ohne `Mh`-Genotyp darf ein Gold-Porzellan-Huhn daher nicht als Mahagoni ausgegeben werden.
+- **Warum wird die Kreuzung schwarz?** Das aktuelle Profil `gold` verwendet `e+/e+`, das Profil `perlgrau` `E/E`. Nach der E-Locus-Dominanz aus Kippenjungle/Chicken Color Standards ist `E` gegenueber `e+` dominant; die Nachkommen sind `E/e+` und werden im POC schwarz. Das ist eine Folge der angenommenen Eltern-Genotypen, nicht der Bezeichnung Gold-Porzellan.
 - **Z-Vererbung:** Der Hahn gibt jeder Nachkommenschaft ein Z. Eine Henne gibt ihren Z-Anteil nur an ihre Sohne; ihre Tochter erhalt von ihr W. Deshalb kann eine Henne ein Z-gebundenes Merkmal nicht an ihre Tochter weitergeben.
+- **Z-Vererbung im POC:** Elternprofile koennen optional als `Hahn` oder `Henne` eingegeben werden. Ein Hahn gibt nur Z, eine Henne Z oder W. `S` und `B` werden bei Hennen haploid bewertet. Dadurch kann zum Beispiel `gold,Hahn x silber,Henne` silberne Soehne und goldene Toechter erzeugen.
 - **Genkopplung:** `Db`, `Ml` und `Pg` liegen nahe beieinander und sollten spaeter als gekoppelte Gruppe mit Rekombinationsrate modelliert werden, nicht zwingend als unabhangige Wurfe.
 - **Phanotyp und Genotyp:** Zwei weisse oder schwarze Huhner koennen verschiedene verdeckte Genotypen besitzen. Die Eingabe fuer die Zucht muss deshalb langfristig Genotypen oder bekannte Traegerstatus statt nur Farbnamen speichern.
+- **E-Locus und Gold/Silber trennen:** Chicken-colors beschreibt die E-Serie als Allelreihe `E > ER > e^Wh > e+ > e^b`. Gold und Silber werden dort zusaetzlich ueber `s+` beziehungsweise `S` bezeichnet. Ein Gold-Phanotyp darf deshalb langfristig nicht allein aus `e+` abgeleitet werden; der POC fuehrt diesen Zusammenhang derzeit noch vereinfacht.
 
 ## POC-Datenschnittstelle
 
@@ -89,6 +99,7 @@ Damit werden sichtbare Werte wie `perlgrau mit weissen Tupfen` aus Genen berechn
 - [Club der Chabozuechter: Farbenschlaege](https://chaboclub.de/die-rasse-chabo/farbenschlaege/) - Chabo-Farbenschlaege und sichtbare Bezeichnungen, darunter Schwarz, Weiss, Blau, Perlgrau, Gesperbert, Tupfen sowie schwarze/blaue Schwaenze.
 - [Kippenjungle: Genetics of Chickencolors and Basics](https://kippenjungle.nl/basisEN.htm) - Grundlagen zu Genotyp/Phanotyp, E-Serie, Epistasis, Blue, Lavender, Mottled, Dominant White, Columbian, Pattern, Melanotic, Z-Vererbung und Kopplung.
 - [Chicken Color Standards: How Chicken Colour Genetics Works](https://chickencolorstandards.com/chicken-colour-genetics.html) - moderne Zusammenfassung von Pigmenten, E-Locus, Dominanz, Blue-Dosierung, Lavender, Weiss, Z-gebundenen Loci und Genkopplung mit Literaturhinweisen.
+- [Chicken-colors: Color determining genes, E-series](https://www.chicken-colors.info/color-determining-genes-e-series) - E-Allele und die dort angegebene Dominanzordnung `E > ER > e^Wh > e+ > e^b`; nennt `s+` (Gold) und `S` (Silber) als separate Bezeichnungen.
 - `Downloads/Bekannte-und-unbekannte-Varienten-der-Chabo.pdf`, S. 47-52 - Chabo-spezifische Beschreibung von `Db`, `Co`, `mo`, `I`, autosomalem Rot, `Mh`, `Cb` und `Di` sowie der Entstehungswege fuer Gelb mit schwarzem/weissem Schwanz, Porzellan, Gelb mit Tupfen und Rot mit Tupfen. Die Quelle unterscheidet dabei sichtbar beschriebenen Phanotyp und dem Zuchter bekannten Genotyp.
 
 Die bisherigen vereinfachten POC-Werte `color` und `pattern` bleiben als Anzeige- bzw. Kompatibilitaetsschicht bestehen. Fuer realistischere Kreuzungen muessen sie schrittweise durch die oben beschriebenen Loci ersetzt werden.
@@ -103,12 +114,12 @@ godot --headless --path . --script res://scripts/poc_cli.gd -- schwarz,weisse_tu
 
 Aktuelle Profile:
 
-- Farben: `schwarz`, `schwarz_trager`, `perlgrau`
+- Farben: `schwarz`, `schwarz_trager`, `perlgrau`, `gold`, `silber`
 - Muster: `einfarbig`, `weisse_tupfen`
 
 `schwarz_trager` wird als `schwarz/perlgrau` modelliert. Das ist wichtig, weil ein rein schwarzes `schwarz/schwarz` mit einem rein perlgrauen `perlgrau/perlgrau` nur schwarze, verdeckt perlgrau tragende Nachkommen erzeugt. Der Traeger `schwarz/perlgrau` x `perlgrau/perlgrau` erzeugt dagegen 50% schwarze und 50% perlgraue Nachkommen.
 
-Das Muster `weisse_tupfen` wird im aktuellen POC als rezessives `mo/mo` modelliert. Einfarbig ist `mo+/mo+`; die sichtbare Tupfung erscheint erst, wenn beide Eltern das `mo`-Allel weitergeben. Die Profile sind bewusst klein gehalten und werden schrittweise um `Db`, `Co`, `I`, `Bl`, `Mh`, `Cb` und `Di` erweitert.
+Das Muster `weisse_tupfen` wird im aktuellen POC als rezessives `mo/mo` modelliert. Einfarbig ist `mo+/mo+`; die sichtbare Tupfung erscheint erst, wenn beide Eltern das `mo`-Allel weitergeben. Das erste Mehr-Locus-Modell bildet `E`, `lav`, `Bl`, `I`, `Db`, `mo`, einen Schwanzfaktor und `B` fuer Sperberung ab. `Co`, `Mh`, `Cb` und `Di` bleiben als fachlich zu validierende Erweiterungen offen.
 
 ### Aktuell testbare Profile
 
@@ -120,7 +131,12 @@ Farben:
 - `gelb`
 - `blau`
 - `gold`
+- `goldhalsig`
+- `gold_mahagoni`
+- `silber`
 - `perlgrau`
+- `perlgrau_silber`
+- `creme`
 
 Muster:
 
@@ -135,6 +151,8 @@ Beispiele:
 ```text
 godot --headless --path . --script res://scripts/poc_cli.gd -- gelb,schwarzer_schwanz gold,porzellan
 godot --headless --path . --script res://scripts/poc_cli.gd -- weiss,gesperbert blau,weisse_tupfen
+godot --headless --path . --script res://scripts/poc_cli.gd -- silber,porzellan perlgrau_silber,porzellan
+godot --headless --path . --script res://scripts/poc_cli.gd -- creme,einfarbig goldhalsig,einfarbig
 ```
 
-Die neuen Profile sind zunächst Eingabe- und Testprofile. Ihre Namen werden bereits als Genotypen durch die Kreuzung geführt, aber die komplexen sichtbaren Kombinationen sind noch nicht vollständig mehrlocusig aufgelöst. Zum Beispiel wird `porzellan` derzeit als eigenes Übergangsprofil geführt; die fachlich korrekte Chabo-Kombination aus Grundfarbe, `Db`/`Co`, `I` und `mo/mo` folgt im nächsten Genetikschritt.
+Die Profile werden als Genotypen durch die Kreuzung geführt. `gold` verwendet im POC `s+/s+`; `silber` verwendet `S/S`, sodass `gold x silber` sichtbares `S/s+` und damit Silber erzeugt. `perlgrau_silber` kombiniert `S/S` mit `lav/lav`; dadurch wird das dunkle Pigment perlgrau statt schwarz. Das aktuelle POC speichert den S-Locus noch als gewöhnliches Allelpaar, weil Geschlecht und ZW/ZZ-Vererbung noch nicht implementiert sind. `porzellan` ist kein eigenes Einzelgen mehr, sondern wird aus einer Gelb-/Schwarzer-Schwanz-Basis (`Db/Db` plus schwarzer Schwanz) und `mo/mo` abgeleitet. Die Auswertung ist weiterhin ein POC: `Co`, `Mh`, `Cb` und `Di`, Genkopplung, Z-Vererbung und die vollständige Interaktion aller Farbloci folgen in weiteren Schritten.

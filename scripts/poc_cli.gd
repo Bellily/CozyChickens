@@ -22,26 +22,35 @@ func _initialize() -> void:
 	print("Kreuzung: %s x %s" % [parent_a.label, parent_b.label])
 	print("Moegliche sichtbare Nachkommen:")
 	for result in results:
-		print("- %s, %s: %.1f%%" % [result.color, result.pattern, result.probability * 100.0])
+		print("- %s, %s (%s): %.1f%%" % [result.color, result.pattern, "Henne" if result.sex == "female" else "Hahn", result.probability * 100.0])
 		print("  Farbgenotyp(en): %s" % ", ".join(result.color_genotypes))
 		print("  Mustergenotyp(en): %s" % ", ".join(result.pattern_genotypes))
-	print("Hinweis: Die Prozentwerte beschreiben Genotyp-Kombinationen vor einer zufaelligen Geschlechtsverteilung.")
+	print("Hinweis: Geschlecht und geschlechtsgebundene Loci werden im POC getrennt ausgewiesen.")
 	quit()
 
 func _parse_parent(value: String) -> Dictionary:
 	var parts := value.split(",")
-	if parts.size() != 2:
+	if parts.size() < 2 or parts.size() > 3:
 		return {}
 	var color_name := parts[0].strip_edges()
 	var pattern_name := parts[1].strip_edges()
+	var biological_sex := "male"
+	if parts.size() == 3:
+		biological_sex = "female" if parts[2].strip_edges().to_lower() in ["henne", "huhn", "female", "w"] else "male"
+	if not PocCatalogScript.is_supported_color(color_name):
+		print("Unbekannte Farbe: %s" % color_name)
+		return {}
+	if not PocCatalogScript.is_supported_pattern(pattern_name):
+		print("Unbekanntes Muster: %s" % pattern_name)
+		return {}
 	return {
-		"label": "%s, %s" % [color_name, pattern_name],
-		"genome": PocCatalogScript.genome_from_description(color_name, pattern_name)
+		"label": "%s, %s (%s)" % [color_name, pattern_name, "Henne" if biological_sex == "female" else "Hahn"],
+		"genome": PocCatalogScript.genome_from_description(color_name, pattern_name, biological_sex)
 	}
 
 func _print_help() -> void:
 	print("Verwendung:")
-	print("godot --headless --path . --script res://scripts/poc_cli.gd -- <Elter 1> <Elter 2>")
+	print("godot --headless --path . --script res://scripts/poc_cli.gd -- <Farbe,Muster[,Hahn/Henne]> <Farbe,Muster[,Hahn/Henne]>")
 	print("Beispiel:")
 	print("godot --headless --path . --script res://scripts/poc_cli.gd -- schwarz,weisse_tupfen perlgrau,weisse_tupfen")
 	print(PocCatalogScript.available_descriptions())
